@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/guregu/null"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -39,11 +38,12 @@ type OauthAccessToken struct {
 
 func (o *OauthAccessToken) Generate(accessToken string, clientID string, userID *int, withScope bool, config Config) OauthAccessToken {
 	if userID != nil {
-		o.UserID = null.StringFrom(strconv.Itoa(*userID))
+		userIDStr := strconv.Itoa(*userID)
+		o.UserID = &userIDStr
 	}
 
 	if withScope {
-		o.Scope = null.StringFrom(scope.User)
+		o.Scope = &scope.User
 	}
 
 	o.ClientID = clientID
@@ -63,7 +63,7 @@ func (o *OauthAccessToken) VerifyExpireIn() bool {
 }
 
 func (o *OauthAccessToken) VerifyUserLoggedIn() bool {
-	if o.UserID.Valid && !o.Scope.Valid {
+	if o.UserID != nil && o.Scope == nil {
 		return true
 	}
 	return false
