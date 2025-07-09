@@ -3,7 +3,7 @@ include .env
 PROJECT_NAME=inventory
 MIGRATION_STEP=
 MIGRATION_PATH=./script/migration
-DB_CONN=postgres://$(DATABASE.PG.WRITE.USER:"%"=%):$(DATABASE.PG.WRITE.PASSWORD:"%"=%)@$(DATABASE.PG.WRITE.HOST:"%"=%):$(DATABASE.PG.WRITE.PORT:"%"=%)/$(DATABASE.PG.WRITE.DBNAME:"%"=%)?sslmode=$(DATABASE.PG.WRITE.SSLMODE:"%"=%)
+DB_CONN=postgres://$(DB.POSTGRESQL.WRITE.USER:"%"=%):$(DB.POSTGRESQL.WRITE.PASSWORD:"%"=%)@$(DB.POSTGRESQL.WRITE.HOST:"%"=%):$(DB.POSTGRESQL.WRITE.PORT:"%"=%)/$(DB.POSTGRESQL.WRITE.NAME:"%"=%)?sslmode=disable
 
 # development
 dev: generate
