@@ -1118,3 +1118,17 @@ INSERT INTO public.auth_user
 (id, "name", username, email, "password", role_id, person_id, status, foto, active, created_by, created_at, updated_by, updated_at, deleted_at, is_deleted, commodity_id, confidence_absensi, confidence_daftar, status_ekspresi, ekspresi_smile, ekspresi_eyes, lock_lokasi, lock_login, manual_produksi_tph, manual_produksi_pabrik, toleh_kanan, toleh_kiri, pabrik_id, "trigger", tracehold)
 VALUES('f9bb8d26-2fe1-47d0-a287-6a6e201eaa23', 'Superadmin', 'superadmin', 'superadmin@gmail.com', '$2a$10$bVPxniv/QZ.8xPsQhQqss.bjZdgxS56fJAxCbmEyl5b7kl7yStLkK', 'HA01', NULL, '1', NULL, true, NULL, '2024-12-16 14:33:47.022', NULL, NULL, NULL, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, false, 1.0);
 
+CREATE TABLE IF NOT EXISTS public.log_activity
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    actions character varying(255) COLLATE pg_catalog."default",
+    jam timestamp without time zone,
+    keterangan text COLLATE pg_catalog."default",
+    id_user character varying(36) COLLATE pg_catalog."default",
+    platform character varying(10) COLLATE pg_catalog."default",
+    ip_address text COLLATE pg_catalog."default",
+    user_agent text COLLATE pg_catalog."default",
+    kode text COLLATE pg_catalog."default",
+    CONSTRAINT log_activity_pkey PRIMARY KEY (id)
+);
+

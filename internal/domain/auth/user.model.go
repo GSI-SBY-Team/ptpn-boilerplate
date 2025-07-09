@@ -387,7 +387,7 @@ type InputLogin struct {
 }
 
 // Response is represent respond login
-func (r *InputLogin) Response(user UserDTO, role Role, person PersonData, komoditas []Komoditas, jenisPengolahan []JenisPengolahan, accessToken string) ResponseLogin {
+func (r *InputLogin) Response(user UserDTO, role Role, person *PersonData, komoditas []Komoditas, jenisPengolahan []JenisPengolahan, accessToken string) ResponseLogin {
 	return ResponseLogin{
 		Token: ResponseLoginToken{
 			AccessToken: accessToken,
@@ -414,7 +414,6 @@ func (r *InputLogin) Response(user UserDTO, role Role, person PersonData, komodi
 			TraceHold:            user.TraceHold,
 			Foto:                 user.Foto,
 			Role:                 role,
-			PersonData:           person,
 			Komoditas:            komoditas,
 			JenisPengolahan:      jenisPengolahan,
 		},
@@ -451,7 +450,6 @@ type ResponseLoginUser struct {
 	Trigger              *bool             `db:"trigger" json:"trigger"`
 	TraceHold            *float64          `db:"tracehold" json:"tracehold"`
 	Role                 Role              `json:"role"`
-	PersonData           PersonData        `json:"personData"`
 	Komoditas            []Komoditas       `json:"komoditas"`
 	JenisPengolahan      []JenisPengolahan `json:"jenisPengolahan"`
 }
@@ -462,15 +460,17 @@ type ResponseLoginToken struct {
 }
 
 // NewUserLoginClaims digunakan untuk mengeset nilai dari JWT
-func NewUserLoginClaims(user UserDTO, person PersonData, expiredIn int) jwt.MapClaims {
+func NewUserLoginClaims(user UserDTO, person *PersonData, expiredIn int) jwt.MapClaims {
 	claims := jwt.MapClaims{}
 	claims["userId"] = user.ID
 	claims["personId"] = user.PersonId
 	claims["roleId"] = user.RoleId
 	claims["commodityId"] = user.CommodityId
-	claims["regionalId"] = person.RegionalID
-	claims["kebunId"] = person.KebunID
-	claims["afdelingId"] = person.AfdelingID
+	if person != nil {
+		claims["regionalId"] = person.RegionalID
+		claims["kebunId"] = person.KebunID
+		claims["afdelingId"] = person.AfdelingID
+	}
 	claims["iat"] = time.Now().Unix()
 	claims["exp"] = time.Now().Add(time.Duration(expiredIn) * time.Hour).Unix()
 

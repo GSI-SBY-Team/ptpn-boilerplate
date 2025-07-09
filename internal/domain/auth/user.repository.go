@@ -88,16 +88,11 @@ var (
 		Select: `SELECT u.id, u.name, u.username, u.email, u.password, u.status, u.role_id, u.commodity_id, u.person_id, u.foto, u.active, u.manual_produksi_tph, u.manual_produksi_pabrik, u.toleh_kanan, u.toleh_kiri, u.pabrik_id, u.trigger, u.tracehold, u.created_by, u.updated_by, u.created_at, u.updated_at, u.deleted_at, u.is_deleted 
 			FROM auth_user u
 			left join person_data k on u.person_id = k.id `,
-		SelectDTO: `SELECT u.id, u.name, u.username, u.email, u.password, u.status, u.role_id, u.commodity_id, mc.nama commodity, u.person_id, u.active,
-			k.nama person_name, k.nik, r.name as role, u.foto , u.manual_produksi_tph, u.manual_produksi_pabrik, u.toleh_kanan, u.toleh_kiri, u.pabrik_id, u.trigger, u.tracehold,
-			k.positionsdesc, mk.nama as nama_kebun, ma.nama as nama_afdeling, pb.iot_factory_id, u.is_deleted
+		SelectDTO: `SELECT u.id, u.name, u.username, u.email, u.password, u.status, u.role_id, u.commodity_id, '' commodity, u.person_id, u.active,
+			'' person_name, '' nik, r.name as role, u.foto , u.manual_produksi_tph, u.manual_produksi_pabrik, u.toleh_kanan, u.toleh_kiri, u.pabrik_id, u.trigger, u.tracehold,
+			'' positionsdesc, '' as nama_kebun, '' as nama_afdeling, '' iot_factory_id, u.is_deleted
 			FROM auth_user u
 			left join auth_role r on r.id = u.role_id
-			left join person_data k on k.id = u.person_id
-			left join m_commodity mc on mc.id = u.commodity_id
-			left join m_kebun mk on mk.id = k.kebun_id
-			left join m_afdeling ma on ma.id = k.afdeling_id
-			left join pabrik pb on pb.id = u.pabrik_id
 			 `,
 		SelectPerson: ` select a.id, a.nik ,a.nama, a.regional_id, a.register, a.personelsubareanew, a.nama_kebun, a.positionsdesc, a.afdeling, a.afdeling_id, a.kebun_id, b.kode as kode_kebun, c.kode as kode_afdeling from person_data a
 						left join m_kebun b on b.id = a.kebun_id
@@ -107,8 +102,7 @@ var (
 		SelectJenisPengolahan: `SELECT r.id, r.nama  FROM pabrik_jenis_pengolahan ur
 			left join m_jenis_pengolahan r on r.id = ur.jenis_pengolahan_id `,
 		Count: `select count(u.id) from auth_user u 
-			left join auth_role r on r.id = u.role_id
-			left join person_data k on k.id = u.person_id `,
+			left join auth_role r on r.id = u.role_id`,
 		Update: `UPDATE auth_user SET 
 		    id=:id,
 			name=:name,

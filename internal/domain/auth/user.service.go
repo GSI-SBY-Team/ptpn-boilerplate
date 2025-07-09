@@ -153,34 +153,34 @@ func (u *UserServiceImpl) Login(input InputLogin, ipAddress string, userAgent st
 		return
 	}
 
-	var komoditas []Komoditas
-	if datauser.ID != uuid.Nil {
-		komoditas, err = u.UserRepository.ResolveKomoditas(datauser.ID.String())
-		if err != nil {
-			errs <- fmt.Errorf("failed to resolve komotidas: %w", err)
-			return
-		}
-	}
+	// var komoditas []Komoditas
+	// if datauser.ID != uuid.Nil {
+	// 	komoditas, err = u.UserRepository.ResolveKomoditas(datauser.ID.String())
+	// 	if err != nil {
+	// 		errs <- fmt.Errorf("failed to resolve komotidas: %w", err)
+	// 		return
+	// 	}
+	// }
 
-	var jenisPengolahan []JenisPengolahan
-	if datauser.PabrikId != nil {
-		jenisPengolahan, err = u.UserRepository.ResolveJenisPengolahan(*datauser.PabrikId)
-		if err != nil {
-			errs <- fmt.Errorf("failed to resolve jenispenoglahan: %w", err)
-			return
-		}
-	}
+	// var jenisPengolahan []JenisPengolahan
+	// if datauser.PabrikId != nil {
+	// 	jenisPengolahan, err = u.UserRepository.ResolveJenisPengolahan(*datauser.PabrikId)
+	// 	if err != nil {
+	// 		errs <- fmt.Errorf("failed to resolve jenispenoglahan: %w", err)
+	// 		return
+	// 	}
+	// }
 
-	var person PersonData
-	if datauser.PersonId != nil {
-		person, err = u.UserRepository.ResolvePerson(*datauser.PersonId)
-		if err != nil {
-			errs <- fmt.Errorf("failed to resolve person: %w", err)
-			return
-		}
-	}
+	// var person PersonData
+	// if datauser.PersonId != nil {
+	// 	person, err = u.UserRepository.ResolvePerson(*datauser.PersonId)
+	// 	if err != nil {
+	// 		errs <- fmt.Errorf("failed to resolve person: %w", err)
+	// 		return
+	// 	}
+	// }
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, NewUserLoginClaims(datauser, person, u.Config.Token.JWT.ExpiredInHour))
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, NewUserLoginClaims(datauser, nil, u.Config.Token.JWT.ExpiredInHour))
 	token, err := claims.SignedString([]byte(u.Config.Token.JWT.AccessToken))
 	if err != nil {
 		errs <- err
@@ -201,7 +201,7 @@ func (u *UserServiceImpl) Login(input InputLogin, ipAddress string, userAgent st
 		Kode:       datauser.Username,
 	}
 	_ = u.LogSystemRepository.CreateLogSystem(logSystem)
-	response = input.Response(datauser, role, person, komoditas, jenisPengolahan, string(token))
+	response = input.Response(datauser, role, nil, nil, nil, string(token))
 	return
 }
 
