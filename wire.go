@@ -9,6 +9,7 @@ import (
 	"ptpn-go-boilerplate/configs"
 	"ptpn-go-boilerplate/infras"
 	"ptpn-go-boilerplate/internal/domain/auth"
+	"ptpn-go-boilerplate/internal/domain/master"
 	"ptpn-go-boilerplate/internal/files"
 	"ptpn-go-boilerplate/internal/handlers"
 	"ptpn-go-boilerplate/transport/http"
@@ -29,6 +30,7 @@ var persistences = wire.NewSet(
 // Wiring for all domains.
 var domains = wire.NewSet(
 	domainAuth,
+	domainMaster,
 )
 
 // Wiring for domain Auth
@@ -66,6 +68,15 @@ var domainAuth = wire.NewSet(
 	wire.Bind(new(auth.UserRepository), new(*auth.UserRepositoryPostgreSQL)),
 )
 
+var domainMaster = wire.NewSet(
+	// RegionalService and Implementation
+	master.ProvideRegionalServiceImpl,
+	wire.Bind(new(master.RegionalService), new(*master.RegionalServiceImpl)),
+	// RegionalRepository interfacce and implementation
+	master.ProvideRegionalRepositoryPostgreSQL,
+	wire.Bind(new(master.RegionalRepository), new(*master.RegionalRepositoryPostgreSQL)),
+)
+
 // Wiring for HTTP routing.
 var routing = wire.NewSet(
 	wire.Struct(new(router.DomainHandlers), "*"),
@@ -74,6 +85,8 @@ var routing = wire.NewSet(
 	handlers.ProvideMenuHandler,
 	handlers.ProvideRoleHandler,
 	handlers.ProvideUserHandler,
+	// master
+	handlers.ProvideRegionalHandler,
 	//File
 	handlers.ProvideFileHandler,
 
