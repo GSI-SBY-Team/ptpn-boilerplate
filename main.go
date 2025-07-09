@@ -4,6 +4,7 @@ package main
 //go:generate go run github.com/google/wire/cmd/wire
 
 import (
+<<<<<<< HEAD
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -14,6 +15,11 @@ import (
 	"strings"
 	"syscall"
 	"time"
+=======
+	"os"
+	"os/signal"
+	"syscall"
+>>>>>>> 46629d237a2eb464af784352c31375ea8303b2db
 
 	"github.com/jmoiron/sqlx"
 	// "github.com/robfig/cron/v3"
@@ -24,6 +30,7 @@ import (
 
 var config *configs.Config
 
+<<<<<<< HEAD
 type HistoryItem struct {
 	DateTime        string  `json:"dateTime" db:"dateTime"`
 	Description     string  `json:"description" db:"description"`
@@ -98,6 +105,10 @@ func StartCrawl() {
 	}
 }
 
+=======
+var conn *sqlx.DB
+
+>>>>>>> 46629d237a2eb464af784352c31375ea8303b2db
 func main() {
 	// Initialize logger
 	logger.InitLogger()
