@@ -4,22 +4,9 @@ package main
 //go:generate go run github.com/google/wire/cmd/wire
 
 import (
-<<<<<<< HEAD
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"strings"
-	"syscall"
-	"time"
-=======
 	"os"
 	"os/signal"
 	"syscall"
->>>>>>> 46629d237a2eb464af784352c31375ea8303b2db
 
 	"github.com/jmoiron/sqlx"
 	// "github.com/robfig/cron/v3"
@@ -30,85 +17,8 @@ import (
 
 var config *configs.Config
 
-<<<<<<< HEAD
-type HistoryItem struct {
-	DateTime        string  `json:"dateTime" db:"dateTime"`
-	Description     string  `json:"description" db:"description"`
-	TransactionCode string  `json:"transactionCode" db:"transaction_code"`
-	Amount          float64 `json:"amount" db:"amount"`
-	Flag            string  `json:"flag" db:"flag"`
-	Ccy             string  `json:"ccy" db:"ccy"`
-	ReffNo          string  `json:"reffno" db:"reffno"`
-}
-
-type ResponseBankJatim struct {
-	ResponseCode string        `json:"responseCode"`
-	ResponseDesc string        `json:"responseDesc"`
-	History      []HistoryItem `json:"history"`
-}
-
-const (
-	noRekening  = "0099011769"
-	rekeningKey = "7lJayynJAGPEKHBSJkFv7G147d5ZqtZ422NeP46Uvp29tPADZ+MNiSGF3t3LWTBAzM4zWSjNa61/gyzlO265xjkCMura9NAjOiSQyRjWpdbrCShKXuycNTS6MEq8yemy"
-	YYYYMMDD    = "20060102"
-)
-
 var conn *sqlx.DB
 
-func StartCrawl() {
-
-	// ... instruksi untuk mengirim automail berisi tagihan
-	fmt.Printf(time.Now().Format("2006-01-02 15:04:05") + " CRAWL DATA TRANSAKSI DARI REKENING BPRD DIJALANKAN.\n")
-	url := config.BankJatim.URL_MUTASI
-	user := config.BankJatim.Username
-	password := config.BankJatim.Password
-	now := time.Now()
-	param := fmt.Sprintf("\n{\n  \"nomorRekening\": \"%v\",\n\t\t \t\t \"key\":\"%v\",\n\t\t\"tglawal\": \"%v\",\n\t \"tglakhir\": \"%v\"\n}", noRekening, rekeningKey, now.Format(YYYYMMDD), now.Format(YYYYMMDD))
-	payload := strings.NewReader(param)
-	req, _ := http.NewRequest("POST", url, payload)
-
-	req.SetBasicAuth(user, password)
-	req.Header.Add("Content-Type", "application/json")
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Println("error disini: ", err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			panic(err)
-		}
-		log.Println("error sini: ", err)
-	}
-	body, err := ioutil.ReadAll(res.Body)
-	log.Println("error: ", err)
-	dataList := ResponseBankJatim{}
-	json.Unmarshal([]byte(string(body)), &dataList)
-	// fmt.Println("BODY:=>", dataList)
-	for _, v := range dataList.History {
-		if v.Flag == "D" {
-			s := strings.Split(v.Description, " ")
-			if s[0] == "PURCHASE" {
-				var msg string
-				err = conn.Get(&msg, "select fn_sync_insert_log_mutasi_rekening($1,$2,$3,$4)", v.DateTime, v.Description, v.Amount, v.ReffNo)
-				fmt.Println("Result :", msg)
-				if err != nil {
-					logger.ErrorWithStack(err)
-					return
-				}
-
-			}
-		}
-	}
-}
-
-=======
-var conn *sqlx.DB
-
->>>>>>> 46629d237a2eb464af784352c31375ea8303b2db
 func main() {
 	// Initialize logger
 	logger.InitLogger()
