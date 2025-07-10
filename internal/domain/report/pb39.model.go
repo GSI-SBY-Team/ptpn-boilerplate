@@ -7,7 +7,7 @@ import (
 )
 
 // field untuk transaksi
-type Regional struct {
+type Report struct {
 	ID        int        `db:"id" json:"id"`
 	Nama      string     `db:"nama" json:"nama"`
 	Alamat    *string    `db:"alamat" json:"alamat"`
@@ -20,7 +20,7 @@ type Regional struct {
 }
 
 // field param di swagger
-type RegionalFormat struct {
+type ReportFormat struct {
 	ID     int       `db:"id" json:"id"`
 	Nama   string    `db:"nama" json:"nama"`
 	Alamat *string   `db:"alamat" json:"alamat"`
@@ -29,7 +29,7 @@ type RegionalFormat struct {
 }
 
 // alis dari json ke db untuk sort table fe
-var ColumnMappRegional = map[string]interface{}{
+var ColumnMappReport = map[string]interface{}{
 	"id":         "id",
 	"nama":       "nama",
 	"alamat":     "alamat",

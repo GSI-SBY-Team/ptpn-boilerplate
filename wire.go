@@ -31,6 +31,7 @@ var persistences = wire.NewSet(
 var domains = wire.NewSet(
 	domainAuth,
 	domainMaster,
+	domainReport,
 )
 
 // Wiring for domain Auth
@@ -77,6 +78,15 @@ var domainMaster = wire.NewSet(
 	wire.Bind(new(master.RegionalRepository), new(*master.RegionalRepositoryPostgreSQL)),
 )
 
+var domainReport = wire.NewSet(
+	// RegionalService and Implementation
+	report.ProvideReportServiceImpl,
+	wire.Bind(new(master.ReportService), new(*master.ReportServiceImpl)),
+	// RegionalRepository interfacce and implementation
+	report.ProvideReportRepositoryPostgreSQL,
+	wire.Bind(new(master.ReportRepository), new(*master.ReportRepositoryPostgreSQL)),
+)
+
 // Wiring for HTTP routing.
 var routing = wire.NewSet(
 	wire.Struct(new(router.DomainHandlers), "*"),
@@ -87,6 +97,8 @@ var routing = wire.NewSet(
 	handlers.ProvideUserHandler,
 	// master
 	handlers.ProvideRegionalHandler,
+	// Report
+	handlers.ProvideReportHandler,
 	//File
 	handlers.ProvideFileHandler,
 

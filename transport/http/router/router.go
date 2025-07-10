@@ -16,6 +16,8 @@ type DomainHandlers struct {
 	UserHandler      handlers.UserHandler
 	// master
 	RegionalHandler handlers.RegionalHandler
+	// Report
+	ReportHandler handlers.ReportHandler
 
 	// File
 	FileHandler handlers.FileHandler
@@ -45,6 +47,8 @@ func (r *Router) SetupRoutes(mux *chi.Mux) {
 		r.DomainHandlers.UserHandler.Router(rc, r.JwtMiddleware)
 		// master
 		r.DomainHandlers.RegionalHandler.Router(rc, r.JwtMiddleware)
+		// Report
+		r.DomainHandlers.ReportHandler.Router(rc, r.JwtMiddleware)
 		// File
 		r.DomainHandlers.FileHandler.Router(rc, r.JwtMiddleware)
 	})
